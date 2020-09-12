@@ -1,5 +1,7 @@
 require('dotenv').config()
 const Telegraf = require('telegraf') // import telegram lib
+const mongoose = require('mongoose')
+const User = reguire('./models/User')
 
 const bot = new Telegraf(process.env.BOT_TOKEN) // get the token from envirenment variable
 const users = []
@@ -7,6 +9,9 @@ const users = []
 const findUserIndex = (username) => {
 	return users.findIndex(i => i.username === username)
 }
+
+const mongoUrl = process.env.MONGO_URI
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 
 bot.start((ctx) => {
 	user = users.find(e => e.username === ctx.from.username)

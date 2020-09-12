@@ -6,6 +6,8 @@
   "dependencies": {
     "axios": "^0.20.0",
     "dotenv": "^8.2.0",
+    "mongoose": "^5.10.5",
+    "mongoose-unique-validator": "^2.0.3",
     "telegraf": "^3.38.0"
   },
   "devDependencies": {
