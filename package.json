@@ -2,12 +2,18 @@
   "name": "pullup-telegrambot-nodejs",
   "version": "1.0.0",
   "description": "Telegram bot for counting pullups",
-  "main": "echobot.js",
+  "main": "index.js",
   "dependencies": {
+    "axios": "^0.20.0",
+    "dotenv": "^8.2.0",
     "telegraf": "^3.38.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "cross-env": "^7.0.2",
+    "nodemon": "^2.0.4"
+  },
   "scripts": {
+    "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
