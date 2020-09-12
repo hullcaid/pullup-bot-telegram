@@ -1,1 +1,1 @@
-# pullup-bot-telegram
+# pullup-telegrambot-nodejs
