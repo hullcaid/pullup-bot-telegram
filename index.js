@@ -1,49 +1,54 @@
 require('dotenv').config()
 const Telegraf = require('telegraf') // import telegram lib
+const mongoose = require('mongoose')
+const User = require('./models/user')
 
 const bot = new Telegraf(process.env.BOT_TOKEN) // get the token from envirenment variable
-const users = []
 
-const findUserIndex = (username) => {
-	return users.findIndex(i => i.username === username)
-}
+const mongoUrl = process.env.MONGO_URI
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 
-bot.start((ctx) => {
-	user = users.find(e => e.username === ctx.from.username)
-	if(user) {
-		return ctx.reply(`${user.username}, you have already registered`)
+bot.start( async (ctx) => {
+	
+	const user = await User.find({ username: ctx.from.username })
+	console.log(user)
+	if(user.length != 0) {
+		return ctx.reply(`${user[0].username}, olet jo rekisteröitynyt`)
 	}
 	else {
-		const newUser = {
+		const newUser = new User({
 			'username': ctx.from.username,
 			'pullups': 0
-		}
-		users.push(newUser)
+		})
+ 
+		await newUser.save()
 		return ctx.reply(`Welcome, ${ctx.from.username}`)
 	}
 }) 
 
-bot.command('pull', (ctx) => {
-	const userIndex = findUserIndex(ctx.from.username)
-	if(userIndex !== -1) {
+bot.command('pull', async (ctx) => {
+	const user = await User.find({ username: ctx.from.username })
+	if(user.length != 0) {
 		const amount = Number(ctx.message.text.slice(6))
-		if(amount !== 0) {
-			users[userIndex].pullups = users[userIndex].pullups + amount
-		} else {
-			users[userIndex].pullups = users[userIndex].pullups + 1
+		const body = {
+			username: user[0].username,
+			pullups: user[0].pullups + (amount !== 0 ? amount : 1)
 		}
-		
-		return ctx.reply(`${ctx.from.first_name} veti ${amount !== 0 ? amount : 1} leukaa`)
-	}
-	else {
+		await User.findByIdAndUpdate(user[0]._id, body)
+		return ctx.reply(`${ctx.from.username} veti ${amount !== 0 ? amount : 1} leukaa`)
+	} else {
 		return ctx.reply('Rekisteröidy ensin')
 	}
 }) 
 
-bot.command('stats', (ctx) => {
-	const userIndex = findUserIndex(ctx.from.username)
-	if (userIndex !== -1) {
-		ctx.reply(`${ctx.from.first_name}, olet vetänyt ${users[userIndex].pullups} leukaa`)
+bot.command('stats', async (ctx) => {
+	
+	const user = await User.find({ username: ctx.from.username })
+
+	if(user.length != 0) {
+		return ctx.reply(`${user[0].username} on vetänyt ${user[0].pullups} leukaa`)
+	} else {
+		return ctx.reply('Rekisteröidy ensins')
 	}
 })
 
