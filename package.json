@@ -1,0 +1,23 @@
+{
+  "name": "pullup-telegrambot-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hullcaid/pullup-telegrambot-nodejs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hullcaid/pullup-telegrambot-nodejs/issues"
+  },
+  "homepage": "https://github.com/hullcaid/pullup-telegrambot-nodejs#readme",
+  "dependencies": {
+    "axios": "^0.20.0",
+    "telegraf": "^3.38.0"
+  }
+}
